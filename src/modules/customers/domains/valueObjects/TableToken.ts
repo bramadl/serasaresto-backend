@@ -32,7 +32,9 @@ export class TableToken extends ValueObject<TableTokenProps> {
     let token = props.value;
     if (!token) {
       if (!props.tableNumber) {
-        return Result.fail<TableToken>("Jancok lu");
+        return Result.fail<TableToken>(
+          "Table number is required when no token provided"
+        );
       }
 
       token = this.generateToken(props.tableNumber);
