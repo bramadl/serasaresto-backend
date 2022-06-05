@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 
-import { BaseController } from "../../../../shared/core/BaseController";
-import { TableNumber } from "../../domains/valueObjects/TableNumber";
-import { TableToken } from "../../domains/valueObjects/TableToken";
-import { TableTokenDTO } from "../../dtos/TableTokenDTO";
-import { ITableRepo } from "../../repositories/ITableRepo";
+import { BaseController } from "../../../shared/core/BaseController";
+import { TableNumber } from "../domains/valueObjects/TableNumber";
+import { TableToken } from "../domains/valueObjects/TableToken";
+import { TableTokenDTO } from "../dtos/TableTokenDTO";
+import { ITableRepo } from "../repositories/ITableRepo";
 
 export class GetTableTokenUseCase extends BaseController {
   private tableRepo: ITableRepo;
