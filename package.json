@@ -1,0 +1,45 @@
+{
+  "name": "serasaresto-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rimraf dist/ && tsc",
+    "start": "yarn build && node dist/main.js",
+    "serve": "nodemon",
+    "lint": "eslint --fix .",
+    "pretty": "prettier --write .",
+    "migrate:dev": "prisma migrate dev --schema src/app/database/schema.prisma",
+    "migrate:reset": "prisma migrate reset --schema src/app/database/schema.prisma",
+    "prisma:generate": "prisma generate --schema src/app/database/schema.prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.14.0",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mysql2": "^2.3.3",
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.1",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.39",
+    "@types/uuid": "^8.3.4",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.16",
+    "prettier": "2.6.2",
+    "prisma": "^3.14.0",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
+  },
+  "prisma": {
+    "seed": "ts-node src/app/database/seeders/seed.ts"
+  }
+}

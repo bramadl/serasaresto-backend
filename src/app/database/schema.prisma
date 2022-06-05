@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id             String         @id @default(uuid())
+  name           String         @db.VarChar(50)
+  token          String?        @unique @db.VarChar(255)
+  orders         Order[]
+  orderHistories OrderHistory[]
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at")
+
+  @@unique([name, token])
+  @@map("customers")
+}
+
+model OrderHistory {
+  id         String   @id @default(uuid())
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String   @map("customer_id")
+  table      Table    @relation(fields: [tableId], references: [id])
+  tableId    String   @map("table_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("order_histories")
+}
+
+model Table {
+  id             String         @id @default(uuid())
+  number         String         @db.Char(3)
+  token          String?        @unique @db.VarChar(255)
+  isReserved     Boolean        @default(false) @map("is_reserved")
+  orders         Order[]
+  carts          Cart[]
+  orderHistories OrderHistory[]
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at")
+
+  @@map("tables")
+}
+
+model Order {
+  id           String        @id @default(uuid())
+  customer     Customer      @relation(fields: [customerId], references: [id])
+  customerId   String        @map("customer_id")
+  table        Table         @relation(fields: [tableId], references: [id])
+  tableId      String        @map("table_id")
+  total        Int
+  status       Status        @default(PENDING)
+  orderDetails OrderDetail[]
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
+
+  @@map("orders")
+}
+
+model OrderDetail {
+  id        String   @id @default(uuid())
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   String   @map("order_id")
+  quantity  Int
+  note      String?  @db.Text
+  menu      Menu     @relation(fields: [menuId], references: [id])
+  menuId    String   @map("menu_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("order_details")
+}
+
+model Menu {
+  id           String        @id @default(uuid())
+  name         String        @db.VarChar(100)
+  description  String        @db.Text
+  price        Int
+  thumbnail    String        @db.VarChar(255)
+  type         MenuType
+  orderDetails OrderDetail[]
+  cartItem     CartItem[]
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
+
+  @@map("menus")
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  cartId    String   @map("cart_id")
+  quantity  Int
+  note      String?  @db.Text
+  menu      Menu     @relation(fields: [menuId], references: [id])
+  menuId    String   @map("menu_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("cart_items")
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  table     Table      @relation(fields: [tableId], references: [id])
+  tableId   String     @map("table_id")
+  total     Int
+  cartItems CartItem[]
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @default(now()) @updatedAt @map("updated_at")
+
+  @@map("carts")
+}
+
+enum Status {
+  PENDING  @map("pending")
+  DONE     @map("done")
+}
+
+enum MenuType {
+  FOOD   @map("food")
+  DRINK  @map("drink")
+}
