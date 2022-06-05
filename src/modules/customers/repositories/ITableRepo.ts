@@ -6,5 +6,7 @@ import { TableToken } from "../domains/valueObjects/TableToken";
 export interface ITableRepo {
   findById(id: string): Promise<Result<Table>>;
   findByTableNumber(number: TableNumber): Promise<Result<Table>>;
+  findByTableToken(token: TableToken): Promise<Result<Table>>;
   updateTableToken(id: string, token: TableToken): Promise<void>;
+  updateTableReservationStatus(token: TableToken): Promise<void>;
 }

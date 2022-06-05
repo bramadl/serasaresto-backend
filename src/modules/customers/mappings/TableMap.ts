@@ -11,7 +11,7 @@ export class TableMap {
           value: raw.token,
           tableNumber: raw.number,
         }).getValue(),
-        isReserved: raw.is_reserved,
+        isReserved: raw.isReserved,
       },
       raw.id
     );

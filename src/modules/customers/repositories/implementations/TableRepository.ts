@@ -28,9 +28,15 @@ export class TableRepository implements ITableRepo {
 
   async findByTableNumber(number: TableNumber): Promise<Result<Table>> {
     const table = await this.prismaTable.findFirst({
-      where: {
-        number: number.value,
-      },
+      where: { number: number.value },
+    });
+    if (!table) return Result.fail<Table>("The table could not be found.");
+    return Result.ok<Table>(TableMap.toDomain(table));
+  }
+
+  async findByTableToken(token: TableToken): Promise<Result<Table>> {
+    const table = await this.prismaTable.findFirst({
+      where: { token: token.value },
     });
     if (!table) return Result.fail<Table>("The table could not be found.");
     return Result.ok<Table>(TableMap.toDomain(table));
@@ -38,12 +44,15 @@ export class TableRepository implements ITableRepo {
 
   async updateTableToken(id: string, token: TableToken): Promise<void> {
     await this.prismaTable.update({
-      where: {
-        id,
-      },
-      data: {
-        token: token.value,
-      },
+      where: { id },
+      data: { token: token.value },
+    });
+  }
+
+  async updateTableReservationStatus(token: TableToken): Promise<void> {
+    await this.prismaTable.update({
+      where: { token: token.value },
+      data: { isReserved: true },
     });
   }
 }
