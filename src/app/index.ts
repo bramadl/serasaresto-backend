@@ -1,8 +1,8 @@
 import express, { Application } from "express";
 import { Server } from "http";
 
-import { APP_CONFIG } from "./app/config";
-import routes from "./app/web/routes";
+import { APP_CONFIG } from "./config";
+import routes from "./web/routes";
 
 const { APP_PORT } = APP_CONFIG;
 
