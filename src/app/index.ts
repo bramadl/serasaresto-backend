@@ -16,6 +16,8 @@ export class App {
   }
 
   private initializeApplication(): void {
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
     this.app.use(routes);
   }
 
