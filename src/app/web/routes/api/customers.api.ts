@@ -4,6 +4,6 @@ import { getTableTokenController } from "../../../../modules/customers/controlle
 
 export const customerRouter = Router();
 
-customerRouter.get("/table/token", (req: Request, res: Response) => {
+customerRouter.post("/generate/table/token", (req: Request, res: Response) => {
   return getTableTokenController.execute(req, res);
 });
