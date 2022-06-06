@@ -16,6 +16,7 @@ model Customer {
   token          String?        @unique @db.VarChar(255)
   orders         Order[]
   orderHistories OrderHistory[]
+  loggedOutAt    DateTime?      @map("logged_out_at")
   createdAt      DateTime       @default(now()) @map("created_at")
   updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at")
 
