@@ -49,10 +49,13 @@ export class TableRepository implements ITableRepo {
     });
   }
 
-  async updateTableReservationStatus(token: TableToken): Promise<void> {
+  async updateTableReservationStatus(
+    token: TableToken,
+    status = true
+  ): Promise<void> {
     await this.prismaTable.update({
       where: { token: token.value },
-      data: { isReserved: true },
+      data: { isReserved: status },
     });
   }
 }

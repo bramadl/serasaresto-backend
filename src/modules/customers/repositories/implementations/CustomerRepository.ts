@@ -1,5 +1,6 @@
-import { Prisma } from "@prisma/client";
+import { Customer as CustomerPrisma, Prisma } from "@prisma/client";
 
+import { Result } from "../../../../shared/logic/Result";
 import { CustomerName } from "../../domains/valueObjects/CustomerName";
 import { TableToken } from "../../domains/valueObjects/TableToken";
 import { ICustomerRepo } from "../ICustomerRepo";
@@ -17,6 +18,22 @@ export class CustomerRepository implements ICustomerRepo {
     this.customerPrisma = customerPrisma;
   }
 
+  private async findById(id: string): Promise<CustomerPrisma | null> {
+    const customer = await this.customerPrisma.findFirst({ where: { id } });
+    if (!customer) return null;
+    return customer;
+  }
+
+  async findByToken(token: string): Promise<Result<CustomerPrisma>> {
+    const foundCustomer = await this.customerPrisma.findFirst({
+      where: { token, loggedOutAt: null },
+    });
+    if (!foundCustomer) {
+      return Result.fail<CustomerPrisma>("Customer could not be found.");
+    }
+    return Result.ok<CustomerPrisma>(foundCustomer);
+  }
+
   async reserveTableFor(
     customerName: CustomerName,
     tableToken: TableToken
@@ -26,6 +43,15 @@ export class CustomerRepository implements ICustomerRepo {
         name: customerName.value,
         token: tableToken.value,
       },
+    });
+  }
+
+  async logsOutCustomer(id: string): Promise<void> {
+    const customer = await this.findById(id);
+    if (!customer) return;
+    await this.customerPrisma.update({
+      where: { id },
+      data: { loggedOutAt: new Date() },
     });
   }
 }
