@@ -33,6 +33,10 @@ export abstract class BaseController {
     });
   }
 
+  public noContent(res: Response) {
+    return res.status(204);
+  }
+
   public badRequest(res: Response, error?: any, message?: string) {
     return res.status(400).json({
       message: message || "Bad Request.",
