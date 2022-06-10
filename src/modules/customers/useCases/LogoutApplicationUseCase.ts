@@ -67,6 +67,12 @@ export class LogoutApplicationUseCase extends BaseController {
        */
       await this.customerRepo.logsOutCustomer(customer.id);
       await this.tableRepo.updateTableReservationStatus(tableToken, false);
+      await this.tableRepo.updateTableToken(
+        tableFromRepo.id,
+        TableToken.create({
+          value: TableToken.generateToken(tableFromRepo.number.value),
+        }).getValue()
+      );
 
       this.noContent(res);
     } catch (err) {
