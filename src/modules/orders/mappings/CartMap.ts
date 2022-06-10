@@ -63,11 +63,6 @@ export class CartMap {
   public static toDTO(cart: Cart): ICartDTO {
     return {
       id: cart.id,
-      table: {
-        number: cart.table.number.value,
-        token: cart.table.number.value,
-        isReserved: cart.table.isReserved(),
-      },
       cartItems: cart.cartItems.map((cartItem) => ({
         menu: {
           name: cartItem.menu.name,
