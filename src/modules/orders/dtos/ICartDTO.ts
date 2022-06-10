@@ -5,6 +5,7 @@ export interface ICartDTO {
     quantity: number;
     note: string;
     menu: {
+      id: string;
       name: string;
       description: string;
       price: number;

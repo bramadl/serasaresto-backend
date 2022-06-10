@@ -65,6 +65,7 @@ export class CartMap {
       id: cart.id,
       cartItems: cart.cartItems.map((cartItem) => ({
         menu: {
+          id: cartItem.menu.id,
           name: cartItem.menu.name,
           description: cartItem.menu.description,
           inStock: cartItem.menu.inStock,

@@ -22,16 +22,32 @@ export class AddItemToCartUseCase extends BaseController {
   public async executeImpl(req: Request, res: Response): Promise<any> {
     try {
       // 1. Take request bodies.
+      const headers = req.headers.authorization;
+      if (!headers) {
+        return res.status(401).json({
+          message: "Unauthorized, please provide a valid table token.",
+        });
+      }
+
+      const [bearer, token] = headers.split(" ");
+      if (bearer !== "Bearer") {
+        return res
+          .status(401)
+          .json({ message: "Unauthorized, please use a valid bearer type." });
+      }
+
       const {
         menu_id: menuIdRequest,
-        quantity: quantityRequest,
         note: noteRequest,
-        table_token: tableTokenRequest,
         cart_id: cartIdRequest,
       } = req.body;
 
+      const tableTokenRequest = token;
+
+      console.log(menuIdRequest);
+
       // 2. Validate the request data.
-      if (!menuIdRequest || !quantityRequest) {
+      if (!menuIdRequest) {
         return this.badRequest(res, "Required parameters are missing.");
       }
       const createTableToken = TableToken.create({ value: tableTokenRequest });
@@ -59,7 +75,7 @@ export class AddItemToCartUseCase extends BaseController {
       // 6. Prepare a new cart item.
       const createCartItem = CartItem.create({
         menu,
-        quantity: quantityRequest,
+        quantity: 1,
         note: noteRequest,
       });
       if (createCartItem.isFailure) {

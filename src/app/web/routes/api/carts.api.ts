@@ -3,6 +3,7 @@ import {
   addItemToCartController,
   getCartUseCase,
 } from "../../../../modules/orders/controllers";
+import { verifyTableToken } from "../../middleware/verifyTableToken";
 
 export const cartRouter = Router();
 
@@ -10,6 +11,6 @@ cartRouter.get("/", (req: Request, res: Response) => {
   return getCartUseCase.execute(req, res);
 });
 
-cartRouter.post("/item", (req: Request, res: Response) => {
+cartRouter.post("/items", verifyTableToken, (req: Request, res: Response) => {
   return addItemToCartController.execute(req, res);
 });
