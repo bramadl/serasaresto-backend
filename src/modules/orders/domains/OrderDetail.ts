@@ -2,20 +2,24 @@ import { Entity } from "../../../shared/core/Entity";
 import { Guard } from "../../../shared/logic/Guard";
 import { Result } from "../../../shared/logic/Result";
 import { Menu } from "./Menu";
+import { Order } from "./Order";
 
-interface OrderProps {
+interface OrderDetailProps {
   order: Order;
   quantity: number;
   note?: string;
   menu: Menu;
 }
 
-export class Order extends Entity<OrderProps> {
-  private constructor(props: OrderProps, id?: string) {
+export class OrderDetail extends Entity<OrderDetailProps> {
+  private constructor(props: OrderDetailProps, id?: string) {
     super(props, id);
   }
 
-  public static create(props: OrderProps, id?: string): Result<Order> {
+  public static create(
+    props: OrderDetailProps,
+    id?: string
+  ): Result<OrderDetail> {
     const guardResult = Guard.againstNullOrUndefinedBulk([
       { argument: props.order, argumentName: "detail's order" },
       { argument: props.quantity, argumentName: "details quantity" },
@@ -24,10 +28,10 @@ export class Order extends Entity<OrderProps> {
     ]);
 
     if (!guardResult.succeeded) {
-      return Result.fail<Order>(guardResult.succeeded);
+      return Result.fail<OrderDetail>(guardResult.succeeded);
     }
 
-    const menu = new Order(props, id);
-    return Result.ok<Order>(menu);
+    const menu = new OrderDetail(props, id);
+    return Result.ok<OrderDetail>(menu);
   }
 }

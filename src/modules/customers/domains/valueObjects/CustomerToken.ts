@@ -25,12 +25,6 @@ export class CustomerToken extends ValueObject<CustomerTokenProps> {
       return Result.fail<CustomerToken>(guardResult.message);
     }
 
-    if (value.trim().length < 4 || value.trim().length > 50) {
-      return Result.fail<CustomerToken>(
-        "Customer token must be at least greater than 4 and less than 50 characters"
-      );
-    }
-
     const customerToken = new CustomerToken({ value });
     return Result.ok<CustomerToken>(customerToken);
   }

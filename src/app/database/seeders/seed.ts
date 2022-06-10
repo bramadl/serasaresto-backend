@@ -1,21 +1,65 @@
-import { PrismaClient } from "@prisma/client";
+import { v4 as uuid } from "uuid";
+import { PrismaClient, Table } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  function generateTable(tableCode: string) {
-    const values = [];
+  function generateTable(tableCode: string): Table[] {
+    const values: Table[] = [];
 
     for (let i = 1; i <= 50; i++) {
       values.push({
+        id: uuid(),
         number: i < 10 ? `${tableCode}0${i}` : `${tableCode}${i}`,
+        isReserved: false,
+        token: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
     }
 
     return values;
   }
 
+  function generateTableCart(tables: Table[]) {
+    const values = [];
+
+    const mappedTables = tables.map((table) => {
+      return { id: table.id };
+    });
+
+    for (let i = 0; i < mappedTables.length; i++) {
+      values.push({
+        tableId: mappedTables[i].id,
+        total: 0,
+      });
+    }
+
+    return values;
+  }
+
+  const tablesForACode = generateTable("A");
+  const tablesForBCode = generateTable("B");
+
+  const cartsForACode = generateTableCart(tablesForACode);
+  const cartsForBCode = generateTableCart(tablesForBCode);
+
+  console.log({
+    tablesForACode,
+    tablesForBCode,
+    cartsForACode,
+    cartsForBCode,
+  });
+
   await prisma.table.createMany({
-    data: [...generateTable("A"), ...generateTable("B")],
+    data: [...tablesForACode, ...tablesForBCode],
+    skipDuplicates: true,
+  });
+
+  await prisma.cart.createMany({
+    data: [
+      ...generateTableCart(tablesForACode),
+      ...generateTableCart(tablesForBCode),
+    ],
     skipDuplicates: true,
   });
 
@@ -82,6 +126,7 @@ async function main() {
         type: "DRINK",
       },
     ],
+    skipDuplicates: true,
   });
 }
 

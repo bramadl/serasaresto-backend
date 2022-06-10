@@ -4,9 +4,8 @@ import { Result } from "../../../shared/logic/Result";
 import { Menu } from "./Menu";
 
 interface CartItemProps {
-  order: CartItem;
   quantity: number;
-  note?: string;
+  note: string | null;
   menu: Menu;
 }
 
@@ -15,12 +14,30 @@ export class CartItem extends Entity<CartItemProps> {
     super(props, id);
   }
 
+  get id(): string {
+    return this._id.toString();
+  }
+
+  get quantity(): number {
+    return this.props.quantity;
+  }
+
+  get note(): string {
+    return this.props.note as string;
+  }
+
+  get menu(): Menu {
+    return this.props.menu;
+  }
+
+  public addQuantity(): void {
+    this.props.quantity = this.props.quantity + 1;
+  }
+
   public static create(props: CartItemProps, id?: string): Result<CartItem> {
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      { argument: props.order, argumentName: "detail's order" },
-      { argument: props.quantity, argumentName: "details quantity" },
-      { argument: props.note, argumentName: "details node" },
-      { argument: props.menu, argumentName: "details menu" },
+      { argument: props.quantity, argumentName: "items quantity" },
+      { argument: props.menu, argumentName: "items menu" },
     ]);
 
     if (!guardResult.succeeded) {

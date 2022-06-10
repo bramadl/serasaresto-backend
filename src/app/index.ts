@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import { Server } from "http";
+import cors from "cors";
 
 import { APP_CONFIG } from "./config";
 import routes from "./web/routes";
@@ -16,6 +17,7 @@ export class App {
   }
 
   private initializeApplication(): void {
+    this.app.use(cors({ origin: "*" }));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(routes);

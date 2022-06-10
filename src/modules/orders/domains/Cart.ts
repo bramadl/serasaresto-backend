@@ -1,39 +1,69 @@
-import { OrderDetail } from "@prisma/client";
 import { Entity } from "../../../shared/core/Entity";
 import { Guard } from "../../../shared/logic/Guard";
 import { Result } from "../../../shared/logic/Result";
-import { Customer } from "../../customers/domains/Customer";
 import { Table } from "../../customers/domains/Table";
 import { CartItem } from "./CartItem";
 
-interface OrderProps {
-  customer: Customer;
+interface CartProps {
   table: Table;
-  total: number;
-  status: "PENDING" | "DONE";
-  orderDetails: OrderDetail[];
-  cartItems: CartItem[];
+  total?: number;
+  cartItems?: CartItem[];
 }
 
-export class Order extends Entity<OrderProps> {
-  private constructor(props: OrderProps, id?: string) {
+export class Cart extends Entity<CartProps> {
+  private constructor(props: CartProps, id?: string) {
     super(props, id);
   }
 
-  public static create(props: OrderProps, id?: string): Result<Order> {
+  get id(): string {
+    return this._id.toString();
+  }
+
+  get table(): Table {
+    return this.props.table;
+  }
+
+  get total(): number {
+    return this.props.total as number;
+  }
+
+  get cartItems(): CartItem[] {
+    return this.props.cartItems as CartItem[];
+  }
+
+  private recalculateTotal(): void {
+    const total = this.cartItems
+      .map((cartItem) => cartItem.menu.price * cartItem.quantity)
+      .reduce((prev, curr) => prev + curr, 0);
+    this.props.total = total;
+  }
+
+  public addItem(cartItem: CartItem) {
+    const existingCartItem = this.cartItems.find((item) =>
+      item.equals(cartItem)
+    );
+    if (existingCartItem) existingCartItem.addQuantity();
+    else this.cartItems.push(cartItem);
+    this.recalculateTotal();
+  }
+
+  public static create(props: CartProps, id?: string): Result<Cart> {
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      { argument: props.customer, argumentName: "customers order" },
       { argument: props.table, argumentName: "tables order" },
-      { argument: props.total, argumentName: "orders total" },
-      { argument: props.status, argumentName: "orders status" },
-      { argument: props.orderDetails, argumentName: "order details" },
     ]);
 
     if (!guardResult.succeeded) {
-      return Result.fail<Order>(guardResult.succeeded);
+      return Result.fail<Cart>(guardResult.succeeded);
     }
 
-    const menu = new Order(props, id);
-    return Result.ok<Order>(menu);
+    const menu = new Cart(
+      {
+        table: props.table,
+        cartItems: props.cartItems || [],
+        total: props.total || 0,
+      },
+      id
+    );
+    return Result.ok<Cart>(menu);
   }
 }

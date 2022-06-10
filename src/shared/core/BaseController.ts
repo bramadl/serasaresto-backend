@@ -34,7 +34,7 @@ export abstract class BaseController {
   }
 
   public noContent(res: Response) {
-    return res.status(204);
+    return res.sendStatus(204);
   }
 
   public badRequest(res: Response, error?: any, message?: string) {

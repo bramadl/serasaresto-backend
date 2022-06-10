@@ -16,6 +16,34 @@ export class Menu extends Entity<MenuProps> {
     super(props, id);
   }
 
+  get id(): string {
+    return this._id.toString();
+  }
+
+  get name(): string {
+    return this.props.name;
+  }
+
+  get price(): number {
+    return this.props.price;
+  }
+
+  get description(): string {
+    return this.props.description;
+  }
+
+  get thumbnail(): string {
+    return this.props.thumbnail as string;
+  }
+
+  get inStock(): boolean {
+    return this.props.inStock;
+  }
+
+  get type(): "FOOD" | "DRINK" {
+    return this.props.type;
+  }
+
   public static create(props: MenuProps, id?: string): Result<Menu> {
     const guardResult = Guard.againstNullOrUndefinedBulk([
       { argument: props.name, argumentName: "menu name" },

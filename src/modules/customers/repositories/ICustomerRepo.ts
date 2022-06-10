@@ -1,11 +1,10 @@
-import { Customer as CustomerPrisma } from "@prisma/client";
-
 import { Result } from "../../../shared/logic/Result";
+import { Customer } from "../domains/Customer";
 import { CustomerName } from "../domains/valueObjects/CustomerName";
 import { TableToken } from "../domains/valueObjects/TableToken";
 
 export interface ICustomerRepo {
-  findByToken(token: string): Promise<Result<CustomerPrisma>>;
+  findByToken(token: string): Promise<Result<Customer>>;
 
   reserveTableFor(
     customerName: CustomerName,

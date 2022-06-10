@@ -1,8 +1,10 @@
 import { Customer as CustomerPrisma, Prisma } from "@prisma/client";
 
 import { Result } from "../../../../shared/logic/Result";
+import { Customer } from "../../domains/Customer";
 import { CustomerName } from "../../domains/valueObjects/CustomerName";
 import { TableToken } from "../../domains/valueObjects/TableToken";
+import { CustomerMap } from "../../mappings/CustomerMap";
 import { ICustomerRepo } from "../ICustomerRepo";
 
 export class CustomerRepository implements ICustomerRepo {
@@ -24,14 +26,14 @@ export class CustomerRepository implements ICustomerRepo {
     return customer;
   }
 
-  async findByToken(token: string): Promise<Result<CustomerPrisma>> {
+  async findByToken(token: string): Promise<Result<Customer>> {
     const foundCustomer = await this.customerPrisma.findFirst({
       where: { token, loggedOutAt: null },
     });
     if (!foundCustomer) {
-      return Result.fail<CustomerPrisma>("Customer could not be found.");
+      return Result.fail<Customer>("Customer could not be found.");
     }
-    return Result.ok<CustomerPrisma>(foundCustomer);
+    return Result.ok<Customer>(CustomerMap.toDomain(foundCustomer));
   }
 
   async reserveTableFor(
