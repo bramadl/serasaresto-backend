@@ -10,6 +10,6 @@ cartRouter.get("/", (req: Request, res: Response) => {
   return getCartUseCase.execute(req, res);
 });
 
-cartRouter.post("/add/item", (req: Request, res: Response) => {
+cartRouter.post("/item", (req: Request, res: Response) => {
   return addItemToCartController.execute(req, res);
 });
