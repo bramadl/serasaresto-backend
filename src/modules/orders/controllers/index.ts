@@ -1,7 +1,7 @@
 import { cartRepository, tableRepository } from "../../customers/repositories";
 import { menuRepository } from "../repositories";
-import { AddItemToCartUseCase } from "../useCases/carts/AddItemToCart";
-import { GetCartUseCase } from "../useCases/carts/GetCart";
+import { AddItemToCartUseCase } from "../useCases/carts/AddItemToCartUseCase";
+import { GetCartUseCase } from "../useCases/carts/GetCartUseCase";
 import { GetMenusUseCase } from "../useCases/menus/GetMenus";
 
 export const getMenusController = new GetMenusUseCase(menuRepository);
