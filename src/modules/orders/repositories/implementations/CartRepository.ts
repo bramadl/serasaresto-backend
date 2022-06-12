@@ -92,9 +92,20 @@ export class CartRepository implements ICartRepo {
 
   public async updateCartItem(
     cart: Cart,
-    menuId: string
+    menuId: string,
+    { quantity, note }: { quantity: number; note: string }
   ): Promise<Result<void>> {
-    throw new Error("HEHE");
+    const isCartExists = await this.exists(cart.id);
+    if (!isCartExists) throw new Error("Cart is not exists.");
+
+    await this.cartItemPrisma.update({
+      include: { cart: true, menu: true },
+      where: { menuId },
+      data: { quantity, note },
+    });
+
+    await this.recalculateCartTotal(cart.id);
+    return Result.ok();
   }
 
   public async removeCartItem(
@@ -110,7 +121,6 @@ export class CartRepository implements ICartRepo {
     });
 
     await this.recalculateCartTotal(cart.id);
-
     return Result.ok<void>();
   }
 }

@@ -21,10 +21,12 @@ export const addItemToCartController = new AddItemToCartUseCase(
 
 export const updateItemFromCartController = new UpdateItemFromCartUseCase(
   cartRepository,
+  menuRepository,
   tableRepository
 );
 
 export const removeItemFromCartController = new RemoveItemFromCartUseCase(
   cartRepository,
+  menuRepository,
   tableRepository
 );

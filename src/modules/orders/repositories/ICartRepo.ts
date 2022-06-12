@@ -5,6 +5,10 @@ export interface ICartRepo {
   getCartById(id: string): Promise<Result<Cart>>;
   getCartByTableId(tableId: string): Promise<Result<Cart>>;
   addCartItem(cart: Cart): Promise<Result<void>>;
-  updateCartItem(cart: Cart, menuId: string): Promise<Result<void>>;
+  updateCartItem(
+    cart: Cart,
+    menuId: string,
+    { quantity, note }: { quantity: number; note: string }
+  ): Promise<Result<void>>;
   removeCartItem(cart: Cart, menuId: string): Promise<Result<void>>;
 }

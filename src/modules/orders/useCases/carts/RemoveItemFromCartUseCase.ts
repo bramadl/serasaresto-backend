@@ -3,14 +3,17 @@ import { BaseController } from "../../../../shared/core/BaseController";
 import { TableToken } from "../../../customers/domains/valueObjects/TableToken";
 import { ITableRepo } from "../../../customers/repositories/ITableRepo";
 import { ICartRepo } from "../../repositories/ICartRepo";
+import { IMenuRepo } from "../../repositories/IMenuRepo";
 
 export class RemoveItemFromCartUseCase extends BaseController {
   private cartRepo: ICartRepo;
+  private menuRepo: IMenuRepo;
   private tableRepo: ITableRepo;
 
-  constructor(cartRepo: ICartRepo, tableRepo: ITableRepo) {
+  constructor(cartRepo: ICartRepo, menuRepo: IMenuRepo, tableRepo: ITableRepo) {
     super();
     this.cartRepo = cartRepo;
+    this.menuRepo = menuRepo;
     this.tableRepo = tableRepo;
   }
 
@@ -46,9 +49,17 @@ export class RemoveItemFromCartUseCase extends BaseController {
           "Can't remove item if the menu quantity is not 1, use update instead."
         );
 
-      // 4. Remove the menu from cart.
+      // 4. Find the menu.
+      const menuRepo = await this.menuRepo.findMenuById(menuIdRequest);
+      if (menuRepo.isFailure) return this.notFound(res, menuRepo.error);
+      const menu = menuRepo.getValue();
+      const menuItem = cart.cartItems.find((item) => item.menu.id === menu.id);
+      if (!menuItem) return this.notFound(res, "Menu not found in this cart.");
+
+      // 5. Remove the menu from cart.
       await this.cartRepo.removeCartItem(cart, menuIdRequest);
 
+      // FINAL. Send response.
       return this.noContent(res);
     } catch (err) {
       console.log("[RemoveItemFromCartUseCase]", err);

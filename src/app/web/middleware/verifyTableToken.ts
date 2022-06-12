@@ -25,9 +25,13 @@ export async function verifyTableToken(
   const tableRepo = await tableRepository.findByTableToken(
     createToken.getValue()
   );
+  if (tableRepo.isFailure) {
+    return res
+      .status(403)
+      .json({ message: "Unauthorized, table could not be found." });
+  }
 
   const table = tableRepo.getValue();
-
   if (table.token.value === token) {
     next();
   } else {
