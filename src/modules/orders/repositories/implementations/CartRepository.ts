@@ -90,7 +90,27 @@ export class CartRepository implements ICartRepo {
     return Result.ok<void>();
   }
 
-  public async updateCartItems(cart: Cart, cartItemId: string): Promise<void> {
+  public async updateCartItem(
+    cart: Cart,
+    menuId: string
+  ): Promise<Result<void>> {
     throw new Error("HEHE");
+  }
+
+  public async removeCartItem(
+    cart: Cart,
+    menuId: string
+  ): Promise<Result<void>> {
+    const isCartExists = await this.exists(cart.id);
+    if (!isCartExists) throw new Error("Cart is not exists.");
+
+    await this.cartItemPrisma.delete({
+      include: { cart: true, menu: true },
+      where: { menuId },
+    });
+
+    await this.recalculateCartTotal(cart.id);
+
+    return Result.ok<void>();
   }
 }

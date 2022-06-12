@@ -2,6 +2,7 @@ import { cartRepository, tableRepository } from "../../customers/repositories";
 import { menuRepository } from "../repositories";
 import { AddItemToCartUseCase } from "../useCases/carts/AddItemToCartUseCase";
 import { GetCartUseCase } from "../useCases/carts/GetCartUseCase";
+import { RemoveItemFromCartUseCase } from "../useCases/carts/RemoveItemFromCartUseCase";
 import { GetMenusUseCase } from "../useCases/menus/GetMenus";
 
 export const getMenusController = new GetMenusUseCase(menuRepository);
@@ -12,6 +13,12 @@ export const getCartUseCase = new GetCartUseCase(
 );
 
 export const addItemToCartController = new AddItemToCartUseCase(
+  cartRepository,
+  menuRepository,
+  tableRepository
+);
+
+export const removeItemFromCartController = new RemoveItemFromCartUseCase(
   cartRepository,
   menuRepository,
   tableRepository
