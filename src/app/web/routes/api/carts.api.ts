@@ -3,6 +3,7 @@ import {
   addItemToCartController,
   getCartUseCase,
   removeItemFromCartController,
+  updateItemFromCartController,
 } from "../../../../modules/orders/controllers";
 import { verifyTableToken } from "../../middleware/verifyTableToken";
 
@@ -15,6 +16,14 @@ cartRouter.get("/", (req: Request, res: Response) => {
 cartRouter.post("/items", verifyTableToken, (req: Request, res: Response) => {
   return addItemToCartController.execute(req, res);
 });
+
+cartRouter.put(
+  "/items/:id",
+  verifyTableToken,
+  (req: Request, res: Response) => {
+    return updateItemFromCartController.execute(req, res);
+  }
+);
 
 cartRouter.delete(
   "/items/:id",

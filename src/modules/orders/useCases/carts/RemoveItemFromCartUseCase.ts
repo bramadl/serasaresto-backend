@@ -2,19 +2,15 @@ import { Request, Response } from "express";
 import { BaseController } from "../../../../shared/core/BaseController";
 import { TableToken } from "../../../customers/domains/valueObjects/TableToken";
 import { ITableRepo } from "../../../customers/repositories/ITableRepo";
-import { Cart } from "../../domains/Cart";
 import { ICartRepo } from "../../repositories/ICartRepo";
-import { IMenuRepo } from "../../repositories/IMenuRepo";
 
 export class RemoveItemFromCartUseCase extends BaseController {
   private cartRepo: ICartRepo;
-  private menuRepo: IMenuRepo;
   private tableRepo: ITableRepo;
 
-  constructor(cartRepo: ICartRepo, menuRepo: IMenuRepo, tableRepo: ITableRepo) {
+  constructor(cartRepo: ICartRepo, tableRepo: ITableRepo) {
     super();
     this.cartRepo = cartRepo;
-    this.menuRepo = menuRepo;
     this.tableRepo = tableRepo;
   }
 
@@ -51,9 +47,6 @@ export class RemoveItemFromCartUseCase extends BaseController {
         );
 
       // 4. Remove the menu from cart.
-      const cartItem = cart.cartItems.find(
-        (cartItem) => cartItem.id === menuIdRequest
-      );
       await this.cartRepo.removeCartItem(cart, menuIdRequest);
 
       return this.noContent(res);
