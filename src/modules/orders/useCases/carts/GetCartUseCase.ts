@@ -19,24 +19,9 @@ export class GetCartUseCase extends BaseController {
   public async executeImpl(req: Request, res: Response): Promise<any> {
     try {
       // 1. Take request params and validate.
-      const headers = req.headers.authorization;
-      if (!headers) {
-        return res.status(401).json({
-          message: "Unauthorized, please provide a valid table token.",
-        });
-      }
-
-      const [bearer, token] = headers.split(" ");
-      if (bearer !== "Bearer") {
-        return res
-          .status(401)
-          .json({ message: "Unauthorized, please use a valid bearer type." });
-      }
-
-      const tableTokenRequest = token;
-      if (!tableTokenRequest) {
-        return this.badRequest(res, "Missing some required params");
-      }
+      const tableTokenRequest = (req.headers.authorization as string).split(
+        " "
+      )[1];
       const createTableToken = TableToken.create({ value: tableTokenRequest });
       if (createTableToken.isFailure) {
         return this.badRequest(res, createTableToken.error);
