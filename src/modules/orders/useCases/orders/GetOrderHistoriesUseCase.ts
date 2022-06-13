@@ -6,7 +6,7 @@ import { ITableRepo } from "../../../customers/repositories/ITableRepo";
 import { OrderMap } from "../../mappings/OrderMap";
 import { IOrderRepo } from "../../repositories/IOrderRepo";
 
-export class getOrderHistoriesUseCase extends BaseController {
+export class GetOrderHistoriesUseCase extends BaseController {
   private customerRepo: ICustomerRepo;
   private orderRepo: IOrderRepo;
   private tableRepo: ITableRepo;

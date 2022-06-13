@@ -9,7 +9,8 @@ import { GetCartUseCase } from "../useCases/carts/GetCartUseCase";
 import { RemoveItemFromCartUseCase } from "../useCases/carts/RemoveItemFromCartUseCase";
 import { UpdateItemFromCartUseCase } from "../useCases/carts/UpdateItemFromCartUseCase";
 import { GetMenusUseCase } from "../useCases/menus/GetMenus";
-import { getOrderHistoriesUseCase } from "../useCases/orders/GetOrderHistoriesUseCase";
+import { ConfirmOrderUseCase } from "../useCases/orders/ConfirmOrderUseCase";
+import { GetOrderHistoriesUseCase } from "../useCases/orders/GetOrderHistoriesUseCase";
 import { MakeOrderUseCase } from "../useCases/orders/MakeOrderUseCase";
 import { ViewOrderUseCase } from "../useCases/orders/ViewOrderUseCase";
 
@@ -50,8 +51,10 @@ export const makeOrderController = new MakeOrderUseCase(
 
 export const viewOrderController = new ViewOrderUseCase(orderRepository);
 
-export const getOrderHistoriesController = new getOrderHistoriesUseCase(
+export const getOrderHistoriesController = new GetOrderHistoriesUseCase(
   customerRepository,
   orderRepository,
   tableRepository
 );
+
+export const confirmOrderController = new ConfirmOrderUseCase();
