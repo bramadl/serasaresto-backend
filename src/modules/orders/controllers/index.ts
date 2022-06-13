@@ -57,4 +57,4 @@ export const getOrderHistoriesController = new GetOrderHistoriesUseCase(
   tableRepository
 );
 
-export const confirmOrderController = new ConfirmOrderUseCase();
+export const confirmOrderController = new ConfirmOrderUseCase(orderRepository);

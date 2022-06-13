@@ -64,6 +64,14 @@ export class OrderRepository implements IOrderRepo {
     return Result.ok<Order>(orderMap);
   }
 
+  public async confirm(orderId: string): Promise<Result<void>> {
+    await this.prismaOrder.update({
+      data: { status: "DONE" },
+      where: { id: orderId },
+    });
+    return Result.ok<void>();
+  }
+
   public async save(order: Order): Promise<Result<any>> {
     const isExists = await this.exists(order.id);
     if (isExists) throw new Error("Order already exists");
