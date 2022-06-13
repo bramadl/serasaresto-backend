@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import {
   addItemToCartController,
-  getCartUseCase,
+  getCartController,
   removeItemFromCartController,
   updateItemFromCartController,
 } from "../../../../modules/orders/controllers";
@@ -9,8 +9,8 @@ import { verifyTableToken } from "../../middleware/verifyTableToken";
 
 export const cartRouter = Router();
 
-cartRouter.get("/", (req: Request, res: Response) => {
-  return getCartUseCase.execute(req, res);
+cartRouter.get("/", verifyTableToken, (req: Request, res: Response) => {
+  return getCartController.execute(req, res);
 });
 
 cartRouter.post("/items", verifyTableToken, (req: Request, res: Response) => {

@@ -1,21 +1,51 @@
-import { OrderDetail } from "@prisma/client";
+import { Status } from "@prisma/client";
 import { Entity } from "../../../shared/core/Entity";
 import { Guard } from "../../../shared/logic/Guard";
 import { Result } from "../../../shared/logic/Result";
 import { Customer } from "../../customers/domains/Customer";
 import { Table } from "../../customers/domains/Table";
+import { OrderDetail } from "./OrderDetail";
 
 interface OrderProps {
   customer: Customer;
   table: Table;
   total: number;
-  status: "PENDING" | "DONE";
+  status: Status;
+  number?: number;
   orderDetails: OrderDetail[];
 }
 
 export class Order extends Entity<OrderProps> {
   private constructor(props: OrderProps, id?: string) {
     super(props, id);
+  }
+
+  get id(): string {
+    return this._id.toString();
+  }
+
+  get customer(): Customer {
+    return this.props.customer;
+  }
+
+  get number(): number {
+    return this.props.number as number;
+  }
+
+  get table(): Table {
+    return this.props.table;
+  }
+
+  get total(): number {
+    return this.props.total;
+  }
+
+  get status(): Status {
+    return this.props.status;
+  }
+
+  get orderDetails(): OrderDetail[] {
+    return this.props.orderDetails;
   }
 
   public static create(props: OrderProps, id?: string): Result<Order> {

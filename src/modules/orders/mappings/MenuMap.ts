@@ -36,7 +36,7 @@ export class MenuMap {
   public static toDTO(menus: Menu[]): IMenuDTO[] {
     return menus.map((menu: Menu) => ({
       id: menu.id,
-      title: menu.name,
+      name: menu.name,
       description: menu.description,
       price: menu.price,
       thumbnail: menu.thumbnail,

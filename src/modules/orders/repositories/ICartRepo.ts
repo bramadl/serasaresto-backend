@@ -11,4 +11,5 @@ export interface ICartRepo {
     { quantity, note }: { quantity: number; note: string }
   ): Promise<Result<void>>;
   removeCartItem(cart: Cart, menuId: string): Promise<Result<void>>;
+  clearCart(cart: Cart): Promise<Result<void>>;
 }

@@ -52,6 +52,7 @@ model Table {
 
 model Order {
   id           String        @id @default(uuid())
+  number       Int           @default(0)
   customer     Customer      @relation(fields: [customerId], references: [id])
   customerId   String        @map("customer_id")
   table        Table         @relation(fields: [tableId], references: [id])

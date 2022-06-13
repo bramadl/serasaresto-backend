@@ -123,4 +123,15 @@ export class CartRepository implements ICartRepo {
     await this.recalculateCartTotal(cart.id);
     return Result.ok<void>();
   }
+
+  public async clearCart(cart: Cart): Promise<Result<void>> {
+    const isCartExists = await this.exists(cart.id);
+    if (!isCartExists) throw new Error("Cart is not exists.");
+
+    await this.cartItemPrisma.deleteMany({
+      where: { cartId: cart.id },
+    });
+    await this.recalculateCartTotal(cart.id);
+    return Result.ok<void>();
+  }
 }

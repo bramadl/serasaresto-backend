@@ -2,10 +2,8 @@ import { Entity } from "../../../shared/core/Entity";
 import { Guard } from "../../../shared/logic/Guard";
 import { Result } from "../../../shared/logic/Result";
 import { Menu } from "./Menu";
-import { Order } from "./Order";
 
 interface OrderDetailProps {
-  order: Order;
   quantity: number;
   note?: string;
   menu: Menu;
@@ -16,12 +14,27 @@ export class OrderDetail extends Entity<OrderDetailProps> {
     super(props, id);
   }
 
+  get id(): string {
+    return this._id.toString();
+  }
+
+  get quantity(): number {
+    return this.props.quantity;
+  }
+
+  get note(): string {
+    return this.props.note as string;
+  }
+
+  get menu(): Menu {
+    return this.props.menu;
+  }
+
   public static create(
     props: OrderDetailProps,
     id?: string
   ): Result<OrderDetail> {
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      { argument: props.order, argumentName: "detail's order" },
       { argument: props.quantity, argumentName: "details quantity" },
       { argument: props.note, argumentName: "details node" },
       { argument: props.menu, argumentName: "details menu" },

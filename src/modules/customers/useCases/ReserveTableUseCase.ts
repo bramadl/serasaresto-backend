@@ -43,12 +43,14 @@ export class ReserveTableUseCase extends BaseController {
 
       // 4. Checks if the table under reservation.
       if (table.isReserved()) {
-        return this.conflict(res, "This table is under reservation.");
+        if (tableTokenRequest !== tableToken.value) {
+          return this.conflict(res, "This table is under reservation.");
+        }
+      } else {
+        // 5. Make the user, reserve this table.
+        await this.customerRepo.reserveTableFor(customerName, table.token);
+        await this.tableRepo.updateTableReservationStatus(table.token);
       }
-
-      // 5. Make the user, reserve this table.
-      await this.customerRepo.reserveTableFor(customerName, table.token);
-      await this.tableRepo.updateTableReservationStatus(table.token);
 
       // 6. Map toDTO for the reserved table.
       const reservedTable: ReservedTableDTO = {
