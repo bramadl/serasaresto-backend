@@ -41,6 +41,7 @@ export class OrderMap {
       })),
       total: order.total,
       number: order.number,
+      created_at: order.createdAt,
     };
   }
 
@@ -93,14 +94,18 @@ export class OrderMap {
       order.table.id
     ).getValue();
 
-    const createOrder = Order.create({
-      customer: createCustomer,
-      orderDetails: createOrderDetails,
-      status: order.status,
-      table: createTable,
-      total: order.total,
-      number: order.number,
-    });
+    const createOrder = Order.create(
+      {
+        customer: createCustomer,
+        orderDetails: createOrderDetails,
+        status: order.status,
+        table: createTable,
+        total: order.total,
+        number: order.number,
+        createdAt: order.createdAt,
+      },
+      order.id
+    );
 
     return createOrder.getValue();
   }

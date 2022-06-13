@@ -9,6 +9,7 @@ import { GetCartUseCase } from "../useCases/carts/GetCartUseCase";
 import { RemoveItemFromCartUseCase } from "../useCases/carts/RemoveItemFromCartUseCase";
 import { UpdateItemFromCartUseCase } from "../useCases/carts/UpdateItemFromCartUseCase";
 import { GetMenusUseCase } from "../useCases/menus/GetMenus";
+import { getOrderHistoriesUseCase } from "../useCases/orders/GetOrderHistoriesUseCase";
 import { MakeOrderUseCase } from "../useCases/orders/MakeOrderUseCase";
 import { ViewOrderUseCase } from "../useCases/orders/ViewOrderUseCase";
 
@@ -48,3 +49,9 @@ export const makeOrderController = new MakeOrderUseCase(
 );
 
 export const viewOrderController = new ViewOrderUseCase(orderRepository);
+
+export const getOrderHistoriesController = new getOrderHistoriesUseCase(
+  customerRepository,
+  orderRepository,
+  tableRepository
+);

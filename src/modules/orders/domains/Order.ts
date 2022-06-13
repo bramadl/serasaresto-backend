@@ -13,6 +13,7 @@ interface OrderProps {
   status: Status;
   number?: number;
   orderDetails: OrderDetail[];
+  createdAt?: Date;
 }
 
 export class Order extends Entity<OrderProps> {
@@ -46,6 +47,10 @@ export class Order extends Entity<OrderProps> {
 
   get orderDetails(): OrderDetail[] {
     return this.props.orderDetails;
+  }
+
+  get createdAt(): Date {
+    return this.props.createdAt as Date;
   }
 
   public static create(props: OrderProps, id?: string): Result<Order> {

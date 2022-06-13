@@ -26,6 +26,30 @@ export class OrderRepository implements IOrderRepo {
     return this.prismaOrder.count();
   }
 
+  public async getAll(
+    tableId: string,
+    customerId: string
+  ): Promise<Result<Order[]>> {
+    const prismaOrders = await this.prismaOrder.findMany({
+      where: {
+        customerId,
+        tableId,
+      },
+      include: {
+        customer: true,
+        orderDetails: {
+          include: {
+            menu: true,
+            order: true,
+          },
+        },
+        table: true,
+      },
+    });
+    const ordersMap = prismaOrders.map((order) => OrderMap.toDomain(order));
+    return Result.ok<Order[]>(ordersMap);
+  }
+
   public async getById(id: string): Promise<Result<Order>> {
     const order = await this.prismaOrder.findUnique({
       where: { id },
