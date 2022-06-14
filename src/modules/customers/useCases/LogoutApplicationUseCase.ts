@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { BaseController } from "../../../shared/core/BaseController";
 import { Guard } from "../../../shared/logic/Guard";
+import { IOrderRepo } from "../../orders/repositories/IOrderRepo";
 import { TableToken } from "../domains/valueObjects/TableToken";
 import { ICustomerRepo } from "../repositories/ICustomerRepo";
 import { ITableRepo } from "../repositories/ITableRepo";
@@ -9,11 +10,17 @@ import { ITableRepo } from "../repositories/ITableRepo";
 export class LogoutApplicationUseCase extends BaseController {
   private tableRepo: ITableRepo;
   private customerRepo: ICustomerRepo;
+  private orderRepo: IOrderRepo;
 
-  constructor(tableRepo: ITableRepo, customerRepo: ICustomerRepo) {
+  constructor(
+    tableRepo: ITableRepo,
+    customerRepo: ICustomerRepo,
+    orderRepo: IOrderRepo
+  ) {
     super();
     this.tableRepo = tableRepo;
     this.customerRepo = customerRepo;
+    this.orderRepo = orderRepo;
   }
 
   public async executeImpl(req: Request, res: Response): Promise<any> {
@@ -55,7 +62,16 @@ export class LogoutApplicationUseCase extends BaseController {
       if (findCustomer.isFailure) return this.notFound(res, findCustomer.error);
       const customer = findCustomer.getValue();
 
-      // 6. Soft delete the user and mark the table as not being reserved.
+      // 6. Find any pending orders. If there is any pending order, than abort.
+      const pendingOrdersRepo = await this.orderRepo.getCustomerPendingOrders(
+        customer.id
+      );
+      const pendingOrdersCount = pendingOrdersRepo.getValue();
+      if (pendingOrdersCount > 0) {
+        return this.badRequest(res, "You still have a pending order(s).");
+      }
+
+      // 7. Soft delete the user and mark the table as not being reserved.
       /**
        * @note
        * Soft delete means we do not actually destroy / remove the user record

@@ -1,3 +1,4 @@
+import { orderRepository } from "../../orders/repositories";
 import { customerRepository, tableRepository } from "../repositories";
 import { GetTableTokenUseCase } from "../useCases/GetTableTokenUseCase";
 import { LogoutApplicationUseCase } from "../useCases/LogoutApplicationUseCase";
@@ -14,5 +15,6 @@ export const reserveTableController = new ReserveTableUseCase(
 
 export const logoutApplicationController = new LogoutApplicationUseCase(
   tableRepository,
-  customerRepository
+  customerRepository,
+  orderRepository
 );

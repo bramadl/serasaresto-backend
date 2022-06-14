@@ -64,6 +64,19 @@ export class OrderRepository implements IOrderRepo {
     return Result.ok<Order>(orderMap);
   }
 
+  public async getCustomerPendingOrders(
+    customerId: string
+  ): Promise<Result<number>> {
+    const orders = await this.prismaOrder.findMany({
+      where: {
+        customerId,
+        status: "PENDING",
+      },
+    });
+
+    return Result.ok<number>(orders.length);
+  }
+
   public async confirm(orderId: string): Promise<Result<void>> {
     await this.prismaOrder.update({
       data: { status: "DONE" },
