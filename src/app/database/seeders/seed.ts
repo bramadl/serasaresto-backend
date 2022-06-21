@@ -1,4 +1,5 @@
 import { v4 as uuid } from "uuid";
+import bcrypt from "bcrypt";
 import { PrismaClient, Table } from "@prisma/client";
 const prisma = new PrismaClient();
 
@@ -127,6 +128,14 @@ async function main() {
       },
     ],
     skipDuplicates: true,
+  });
+
+  await prisma.admin.create({
+    data: {
+      name: "Admin",
+      email: "admin@admin.com",
+      password: await bcrypt.hash("admin", 10),
+    },
   });
 }
 
