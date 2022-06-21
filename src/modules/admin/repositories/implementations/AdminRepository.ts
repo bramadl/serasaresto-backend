@@ -36,7 +36,10 @@ export class AdminRepository implements IAdminRepo {
     const adminPersistence = AdminMap.toPersistence(admin);
 
     if (isExists) {
-      // Run update command.
+      await this.adminPrisma.update({
+        where: { id: admin.id },
+        data: { ...adminPersistence },
+      });
     } else {
       await this.adminPrisma.create({
         data: {
