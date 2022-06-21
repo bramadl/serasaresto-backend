@@ -1,7 +1,8 @@
-import { Customer as CustomerPrisma } from "@prisma/client";
+import { Customer as CustomerPrisma, Order, Table } from "@prisma/client";
 import { Customer } from "../domains/Customer";
 import { CustomerName } from "../domains/valueObjects/CustomerName";
 import { CustomerToken } from "../domains/valueObjects/CustomerToken";
+import { FullCustomerDTO } from "../dtos/CustomerDTO";
 
 export class CustomerMap {
   public static toDomain(customer: CustomerPrisma): Customer {
@@ -17,5 +18,20 @@ export class CustomerMap {
     );
 
     return createCustomer.getValue();
+  }
+
+  public static toDTO(
+    customer: CustomerPrisma & {
+      table: Table;
+      orders: Order[];
+    }
+  ): FullCustomerDTO {
+    return {
+      id: customer.id,
+      name: customer.name,
+      ordersCount: customer.orders.length,
+      reserveTableAt: customer.createdAt,
+      tableNumber: customer.table.number,
+    };
   }
 }

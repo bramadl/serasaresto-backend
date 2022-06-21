@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
 import { PrismaClient, Table } from "@prisma/client";
+import { TableToken } from "../../../modules/customers/domains/valueObjects/TableToken";
 const prisma = new PrismaClient();
 
 async function main() {
@@ -8,11 +9,13 @@ async function main() {
     const values: Table[] = [];
 
     for (let i = 1; i <= 50; i++) {
+      const tableNumber = i < 10 ? `${tableCode}0${i}` : `${tableCode}${i}`;
+
       values.push({
         id: uuid(),
-        number: i < 10 ? `${tableCode}0${i}` : `${tableCode}${i}`,
+        number: tableNumber,
         isReserved: false,
-        token: null,
+        token: TableToken.generateToken(tableNumber),
         createdAt: new Date(),
         updatedAt: new Date(),
       });

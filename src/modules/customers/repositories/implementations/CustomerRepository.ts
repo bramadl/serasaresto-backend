@@ -1,4 +1,9 @@
-import { Customer as CustomerPrisma, Prisma } from "@prisma/client";
+import {
+  Customer as CustomerPrisma,
+  Order,
+  Prisma,
+  Table,
+} from "@prisma/client";
 
 import { Result } from "../../../../shared/logic/Result";
 import { Customer } from "../../domains/Customer";
@@ -28,6 +33,27 @@ export class CustomerRepository implements ICustomerRepo {
 
   async countCustomers(): Promise<number> {
     return this.customerPrisma.count();
+  }
+
+  async getLatestTen(): Promise<
+    (CustomerPrisma & { table: Table; orders: Order[] })[]
+    // eslint-disable-next-line indent
+  > {
+    const customers = await this.customerPrisma.findMany({
+      include: {
+        orders: true,
+        table: true,
+      },
+      where: {
+        loggedOutAt: null,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 10,
+    });
+
+    return customers;
   }
 
   async findByToken(token: string): Promise<Result<Customer>> {
