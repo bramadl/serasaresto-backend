@@ -2,6 +2,7 @@ import { Result } from "../../../shared/logic/Result";
 import { Order } from "../domains/Order";
 
 export interface IOrderRepo {
+  countOrders(): Promise<number>;
   getAll(tableId: string, customerId: string): Promise<Result<Order[]>>;
   getById(id: string): Promise<Result<Order>>;
   getCustomerPendingOrders(customerId: string): Promise<Result<number>>;

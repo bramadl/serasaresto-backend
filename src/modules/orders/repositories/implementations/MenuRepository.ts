@@ -56,6 +56,10 @@ export class MenuRepository implements IMenuRepo {
     };
   }
 
+  public async countMenus(): Promise<number> {
+    return this.menuPrisma.count();
+  }
+
   public async getMenus(
     option: SearchOption
   ): Promise<{ data: Result<Menu[]>; pagination: PaginationConstructor }> {

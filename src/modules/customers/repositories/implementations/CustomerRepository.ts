@@ -26,6 +26,10 @@ export class CustomerRepository implements ICustomerRepo {
     return customer;
   }
 
+  async countCustomers(): Promise<number> {
+    return this.customerPrisma.count();
+  }
+
   async findByToken(token: string): Promise<Result<Customer>> {
     const foundCustomer = await this.customerPrisma.findFirst({
       where: { token, loggedOutAt: null },

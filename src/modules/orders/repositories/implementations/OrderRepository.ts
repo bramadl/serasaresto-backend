@@ -26,6 +26,10 @@ export class OrderRepository implements IOrderRepo {
     return this.prismaOrder.count();
   }
 
+  async countOrders(): Promise<number> {
+    return this.count();
+  }
+
   public async getAll(
     tableId: string,
     customerId: string

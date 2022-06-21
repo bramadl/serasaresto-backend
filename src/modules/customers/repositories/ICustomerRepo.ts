@@ -4,6 +4,8 @@ import { CustomerName } from "../domains/valueObjects/CustomerName";
 import { TableToken } from "../domains/valueObjects/TableToken";
 
 export interface ICustomerRepo {
+  countCustomers(): Promise<number>;
+
   findByToken(token: string): Promise<Result<Customer>>;
 
   reserveTableFor(

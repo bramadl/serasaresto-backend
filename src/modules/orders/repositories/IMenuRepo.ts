@@ -18,6 +18,8 @@ export interface PaginationConstructor {
 }
 
 export interface IMenuRepo {
+  countMenus(): Promise<number>;
+
   getMenus(
     option: SearchOption
   ): Promise<{ data: Result<Menu[]>; pagination: PaginationConstructor }>;
