@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { Admin } from "../../domains/Admin";
+import { AdminEmail } from "../../domains/valueObjects/AdminEmail";
 import { AdminMap } from "../../mappings/AdminMap";
 import { IAdminRepo } from "../IAdminRepo";
 
@@ -18,6 +19,14 @@ export class AdminRepository implements IAdminRepo {
 
   async getById(id: string): Promise<Admin | null> {
     const admin = await this.adminPrisma.findUnique({ where: { id } });
+    if (!admin) return null;
+    return AdminMap.toDomain(admin);
+  }
+
+  async getByEmail(email: AdminEmail): Promise<Admin | null> {
+    const admin = await this.adminPrisma.findFirst({
+      where: { email: email.value },
+    });
     if (!admin) return null;
     return AdminMap.toDomain(admin);
   }
