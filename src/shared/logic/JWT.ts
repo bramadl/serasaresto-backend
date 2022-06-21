@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import moment from "moment";
 
 export class JWT {
   public static generateAccessToken(userId: string, userName: string) {
@@ -6,7 +7,7 @@ export class JWT {
       {
         sub: userId,
         iss: userName,
-        iat: new Date(),
+        iat: moment().unix(),
       },
       "secret",
       {
