@@ -22,12 +22,15 @@ export class AdminPassword extends ValueObject<AdminPasswordProps> {
     return this.props.isHashed;
   }
 
-  comparePassword(plainPassword: string): boolean {
-    if (this.isHashed) {
-      return bcrypt.compareSync(plainPassword, this.value);
+  static comparePassword(
+    plainPassword: string,
+    password: AdminPassword
+  ): boolean {
+    if (password.isHashed) {
+      return bcrypt.compareSync(plainPassword, password.value);
     }
 
-    return plainPassword === this.value;
+    return plainPassword === password.value;
   }
 
   static encryptPassword(plainPassword: string): string {
