@@ -11,27 +11,40 @@ datasource db {
 }
 
 model Customer {
-  id             String         @id @default(uuid())
-  name           String         @db.VarChar(50)
-  token          String?        @unique @db.VarChar(255)
-  orders         Order[]
-  loggedOutAt    DateTime?      @map("logged_out_at")
-  createdAt      DateTime       @default(now()) @map("created_at")
-  updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at")
+  id          String    @id @default(uuid())
+  name        String    @db.VarChar(50)
+  token       String?   @unique @db.VarChar(255)
+  orders      Order[]
+  loggedOutAt DateTime? @map("logged_out_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
 
   @@unique([name, token])
   @@map("customers")
 }
 
+model Admin {
+  id             String   @id @default(uuid())
+  name           String
+  email          String
+  password       String
+  avatar         String?
+  lastLoggedInAt DateTime @default(now()) @map("last_logged_in_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
 model Table {
-  id             String         @id @default(uuid())
-  number         String         @unique @db.Char(3)
-  token          String?        @unique @db.VarChar(255)
-  isReserved     Boolean        @default(false) @map("is_reserved")
-  orders         Order[]
-  carts          Cart[]
-  createdAt      DateTime       @default(now()) @map("created_at")
-  updatedAt      DateTime       @default(now()) @updatedAt @map("updated_at")
+  id         String   @id @default(uuid())
+  number     String   @unique @db.Char(3)
+  token      String?  @unique @db.VarChar(255)
+  isReserved Boolean  @default(false) @map("is_reserved")
+  orders     Order[]
+  carts      Cart[]
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("tables")
 }
