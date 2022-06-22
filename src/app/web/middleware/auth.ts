@@ -2,15 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
 import { JWT } from "../../../shared/logic/JWT";
 
-const parseBearerFromHeader = (authorization: string) => {
-  const [bearer, token] = authorization.split(" ");
-  return { bearer, token };
-};
-
 export const auth =
   (role: string) => (req: Request, res: Response, next: NextFunction) => {
     if (!req.headers.authorization) return res.sendStatus(403);
-    const { token } = parseBearerFromHeader(req.headers.authorization);
+    const { token } = JWT.parseTokenFromHeader(req.headers.authorization);
 
     try {
       const payload = JWT.verifyToken(token) as JwtPayload;

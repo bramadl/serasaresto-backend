@@ -2,6 +2,11 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import moment from "moment";
 
 export class JWT {
+  public static parseTokenFromHeader(authorization: string) {
+    const [bearer, token] = authorization.split(" ");
+    return { bearer, token };
+  }
+
   public static generateAccessToken(userId: string, userName: string) {
     const payload: JwtPayload = {
       sub: userId,
