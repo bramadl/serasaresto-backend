@@ -12,6 +12,12 @@ import { TableNumber } from "../domains/valueObjects/TableNumber";
 
 export interface ICustomerRepo {
   countCustomers(): Promise<number>;
+  getAll(): Promise<
+    (CustomerPrisma & {
+      table: TablePrisma;
+      orders: Order[];
+    })[]
+  >;
   getLatestTen(): Promise<
     (CustomerPrisma & {
       table: TablePrisma;
@@ -25,4 +31,5 @@ export interface ICustomerRepo {
     tableNumber: TableNumber
   ): Promise<void>;
   logsOutCustomer(id: string): Promise<void>;
+  remove(id: string): Promise<void>;
 }

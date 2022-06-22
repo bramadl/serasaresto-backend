@@ -5,6 +5,8 @@ import {
   getTableTokenController,
   logoutApplicationController,
   reserveTableController,
+  getCustomersUseCase,
+  removeCustomerUseCase,
 } from "../../../../modules/customers/controllers";
 import { auth } from "../../middleware/auth";
 
@@ -17,6 +19,14 @@ customerRouter.get(
     return getTenLatestCustomersController.execute(req, res);
   }
 );
+
+customerRouter.get("/all", auth("admin"), (req: Request, res: Response) => {
+  return getCustomersUseCase.execute(req, res);
+});
+
+customerRouter.delete("/:id", auth("admin"), (req: Request, res: Response) => {
+  return removeCustomerUseCase.execute(req, res);
+});
 
 customerRouter.post("/generate/table/token", (req: Request, res: Response) => {
   return getTableTokenController.execute(req, res);

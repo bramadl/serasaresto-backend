@@ -36,6 +36,17 @@ export class CustomerRepository implements ICustomerRepo {
     return this.customerPrisma.count();
   }
 
+  async getAll(): Promise<
+    (CustomerPrisma & { table: TablePrisma; orders: Order[] })[]
+    // eslint-disable-next-line indent
+  > {
+    const customers = await this.customerPrisma.findMany({
+      include: { orders: true, table: true },
+    });
+
+    return customers;
+  }
+
   async getLatestTen(): Promise<
     (CustomerPrisma & { table: TablePrisma; orders: Order[] })[]
     // eslint-disable-next-line indent
@@ -77,6 +88,12 @@ export class CustomerRepository implements ICustomerRepo {
     await this.customerPrisma.update({
       where: { id },
       data: { loggedOutAt: new Date() },
+    });
+  }
+
+  async remove(id: string): Promise<void> {
+    await this.customerPrisma.delete({
+      where: { id },
     });
   }
 }
