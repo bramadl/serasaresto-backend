@@ -1,11 +1,14 @@
 import { orderRepository } from "../../orders/repositories";
 import { customerRepository, tableRepository } from "../repositories";
+import { GetAllTableUseCase } from "../useCases/GetAllTableUseCase";
 import { GetCustomersUseCase } from "../useCases/GetCustomersUseCase";
 import { GetLastTenCustomersUseCase } from "../useCases/GetLastTenCustomersUseCase";
 import { GetTableTokenUseCase } from "../useCases/GetTableTokenUseCase";
 import { LogoutApplicationUseCase } from "../useCases/LogoutApplicationUseCase";
 import { RemoveCustomerUseCase } from "../useCases/RemoveCustomerUseCase";
 import { ReserveTableUseCase } from "../useCases/ReserveTableUseCase";
+
+export const getAllTableController = new GetAllTableUseCase(tableRepository);
 
 export const getTableTokenController = new GetTableTokenUseCase(
   tableRepository

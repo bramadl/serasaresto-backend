@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Customer, Order, Prisma, Table as TablePrisma } from "@prisma/client";
 
 import { Result } from "../../../../shared/logic/Result";
 import { Table } from "../../domains/Table";
@@ -18,6 +18,30 @@ export class TableRepository implements ITableRepo {
     >
   ) {
     this.prismaTable = prismaTable;
+  }
+
+  async getAll(): Promise<
+    (TablePrisma & {
+      orders: Order[];
+      customer: Customer[];
+    })[]
+    // eslint-disable-next-line indent
+  > {
+    const tables = await this.prismaTable.findMany({
+      include: {
+        orders: true,
+        customer: {
+          where: {
+            loggedOutAt: null,
+          },
+        },
+      },
+      orderBy: {
+        number: "asc",
+      },
+    });
+
+    return tables;
   }
 
   async findById(id: string): Promise<Result<Table>> {
