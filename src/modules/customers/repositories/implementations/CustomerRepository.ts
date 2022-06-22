@@ -41,16 +41,8 @@ export class CustomerRepository implements ICustomerRepo {
     // eslint-disable-next-line indent
   > {
     const customers = await this.customerPrisma.findMany({
-      include: {
-        orders: true,
-        table: true,
-      },
-      where: {
-        loggedOutAt: null,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
+      include: { orders: true, table: true },
+      orderBy: { createdAt: "desc" },
       take: 10,
     });
 

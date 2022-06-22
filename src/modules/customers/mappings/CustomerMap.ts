@@ -31,6 +31,7 @@ export class CustomerMap {
       name: customer.name,
       ordersCount: customer.orders.length,
       reserveTableAt: customer.createdAt,
+      loggedOutAt: customer.loggedOutAt as Date,
       tableNumber: customer.table.number,
     };
   }

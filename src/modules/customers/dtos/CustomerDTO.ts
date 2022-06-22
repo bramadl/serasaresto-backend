@@ -11,4 +11,5 @@ export interface FullCustomerDTO extends BaseCustomer {
   tableNumber: string;
   ordersCount: number;
   reserveTableAt: Date;
+  loggedOutAt: Date;
 }
