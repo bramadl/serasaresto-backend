@@ -4,10 +4,11 @@ import {
   getProfileController,
   loginController,
 } from "../../../../modules/admin/controllers";
+import { auth } from "../../middleware/auth";
 
 export const adminRouter = Router();
 
-adminRouter.get("/profile", (req: Request, res: Response) => {
+adminRouter.get("/profile", auth("admin"), (req: Request, res: Response) => {
   return getProfileController.execute(req, res);
 });
 

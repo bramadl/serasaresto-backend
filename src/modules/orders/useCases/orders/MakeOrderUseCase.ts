@@ -47,11 +47,8 @@ export class MakeOrderUseCase extends BaseController {
       const cart = cartRepo.getValue();
 
       // 3. We need to take customer, table, total, and the cart items' menus
-      const customerRepo = await this.customerRepo.findByToken(
-        table.token.value
-      );
-      if (customerRepo.isFailure) return this.notFound(res, customerRepo.error);
-      const customer = customerRepo.getValue();
+      const customer = await this.customerRepo.findByTable(table);
+      if (!customer) return this.notFound(res, "Customer not found.");
       const total = cart.total;
       const cartItems = cart.cartItems;
 

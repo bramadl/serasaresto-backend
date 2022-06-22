@@ -48,7 +48,11 @@ export class ReserveTableUseCase extends BaseController {
         }
       } else {
         // 5. Make the user, reserve this table.
-        await this.customerRepo.reserveTableFor(customerName, table.token);
+        await this.customerRepo.reserveTableFor(
+          customerName,
+          table.token,
+          table.number
+        );
         await this.tableRepo.updateTableReservationStatus(table.token);
       }
 

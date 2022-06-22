@@ -56,11 +56,8 @@ export class LogoutApplicationUseCase extends BaseController {
       if (tableRepoNum !== tablePayloadNum) return this.forbiddenAccess(res);
 
       // 5. Find the customer that owns this valid token.
-      const findCustomer = await this.customerRepo.findByToken(
-        tableToken.value
-      );
-      if (findCustomer.isFailure) return this.notFound(res, findCustomer.error);
-      const customer = findCustomer.getValue();
+      const customer = await this.customerRepo.findByTable(tableFromRepo);
+      if (!customer) return this.notFound(res, "Customer not found.");
 
       // 6. Find any pending orders. If there is any pending order, than abort.
       const pendingOrdersRepo = await this.orderRepo.getCustomerPendingOrders(

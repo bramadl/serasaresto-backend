@@ -1,10 +1,12 @@
+export interface AdminDTO {
+  id: string;
+  avatar: string;
+  name: string;
+  email: string;
+  lastLoggedInAt: Date;
+}
+
 export interface LoginDTO {
-  user: {
-    id: string;
-    avatar: string;
-    name: string;
-    email: string;
-    lastLoggedInAt: Date;
-  };
+  user: AdminDTO;
   token: string;
 }

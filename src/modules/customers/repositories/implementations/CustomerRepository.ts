@@ -2,12 +2,13 @@ import {
   Customer as CustomerPrisma,
   Order,
   Prisma,
-  Table,
+  Table as TablePrisma,
 } from "@prisma/client";
 
-import { Result } from "../../../../shared/logic/Result";
 import { Customer } from "../../domains/Customer";
+import { Table } from "../../domains/Table";
 import { CustomerName } from "../../domains/valueObjects/CustomerName";
+import { TableNumber } from "../../domains/valueObjects/TableNumber";
 import { TableToken } from "../../domains/valueObjects/TableToken";
 import { CustomerMap } from "../../mappings/CustomerMap";
 import { ICustomerRepo } from "../ICustomerRepo";
@@ -36,7 +37,7 @@ export class CustomerRepository implements ICustomerRepo {
   }
 
   async getLatestTen(): Promise<
-    (CustomerPrisma & { table: Table; orders: Order[] })[]
+    (CustomerPrisma & { table: TablePrisma; orders: Order[] })[]
     // eslint-disable-next-line indent
   > {
     const customers = await this.customerPrisma.findMany({
@@ -56,24 +57,24 @@ export class CustomerRepository implements ICustomerRepo {
     return customers;
   }
 
-  async findByToken(token: string): Promise<Result<Customer>> {
+  async findByTable(table: Table): Promise<Customer | null> {
     const foundCustomer = await this.customerPrisma.findFirst({
-      where: { token, loggedOutAt: null },
+      where: { table: { id: table.id }, loggedOutAt: null },
     });
-    if (!foundCustomer) {
-      return Result.fail<Customer>("Customer could not be found.");
-    }
-    return Result.ok<Customer>(CustomerMap.toDomain(foundCustomer));
+    if (!foundCustomer) return null;
+    return CustomerMap.toDomain(foundCustomer);
   }
 
   async reserveTableFor(
     customerName: CustomerName,
-    tableToken: TableToken
+    tableToken: TableToken,
+    tableNumber: TableNumber
   ): Promise<void> {
     await this.customerPrisma.create({
       data: {
         name: customerName.value,
         token: tableToken.value,
+        tableNumber: tableNumber.value,
       },
     });
   }

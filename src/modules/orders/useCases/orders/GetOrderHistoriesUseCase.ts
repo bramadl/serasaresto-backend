@@ -38,11 +38,8 @@ export class GetOrderHistoriesUseCase extends BaseController {
       const tableRepo = await this.tableRepo.findByTableToken(tableToken);
       if (tableRepo.isFailure) return this.notFound(res, tableRepo.error);
       const table = tableRepo.getValue();
-      const customerRepo = await this.customerRepo.findByToken(
-        table.token.value
-      );
-      if (customerRepo.isFailure) return this.notFound(res, customerRepo.error);
-      const customer = customerRepo.getValue();
+      const customer = await this.customerRepo.findByTable(table);
+      if (!customer) return this.notFound(res, "Customer not found.");
 
       // 3. Get order from repo.
       const ordersRepo = await this.orderRepo.getAll(table.id, customer.id);

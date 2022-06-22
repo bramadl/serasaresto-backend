@@ -1,21 +1,28 @@
-import { Result } from "../../../shared/logic/Result";
-import { Customer as CustomerPrisma, Order, Table } from "@prisma/client";
+import {
+  Customer as CustomerPrisma,
+  Order,
+  Table as TablePrisma,
+} from "@prisma/client";
+
+import { Table } from "../domains/Table";
 import { Customer } from "../domains/Customer";
 import { CustomerName } from "../domains/valueObjects/CustomerName";
 import { TableToken } from "../domains/valueObjects/TableToken";
+import { TableNumber } from "../domains/valueObjects/TableNumber";
 
 export interface ICustomerRepo {
   countCustomers(): Promise<number>;
   getLatestTen(): Promise<
     (CustomerPrisma & {
-      table: Table;
+      table: TablePrisma;
       orders: Order[];
     })[]
   >;
-  findByToken(token: string): Promise<Result<Customer>>;
+  findByTable(table: Table): Promise<Customer | null>;
   reserveTableFor(
     customerName: CustomerName,
-    tableToken: TableToken
+    tableToken: TableToken,
+    tableNumber: TableNumber
   ): Promise<void>;
   logsOutCustomer(id: string): Promise<void>;
 }

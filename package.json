@@ -8,11 +8,7 @@
     "start": "yarn build && node dist/main.js",
     "serve": "nodemon",
     "lint": "eslint --fix .",
-    "pretty": "prettier --write .",
-    "db:push": "prisma db push --schema src/app/database/schema.prisma",
-    "migrate:dev": "prisma migrate dev --schema src/app/database/schema.prisma",
-    "migrate:reset": "prisma migrate reset --schema src/app/database/schema.prisma",
-    "prisma:generate": "prisma generate --schema src/app/database/schema.prisma"
+    "pretty": "prettier --write ."
   },
   "dependencies": {
     "@prisma/client": "^3.14.0",
@@ -51,6 +47,7 @@
     "typescript": "^4.7.3"
   },
   "prisma": {
+    "schema": "src/app/database/schema.prisma",
     "seed": "ts-node src/app/database/seeders/seed.ts"
   }
 }

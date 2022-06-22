@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../../shared/core/BaseController";
-import { JWT } from "../../../shared/logic/JWT";
+import { AdminDTO } from "../dtos/LoginDTO";
 import { IAdminRepo } from "../repositories/IAdminRepo";
 
 export class GetProfileUseCase extends BaseController {
@@ -13,10 +13,20 @@ export class GetProfileUseCase extends BaseController {
 
   public async executeImpl(req: Request, res: Response): Promise<any> {
     try {
-      const authorization = req.headers.authorization as string;
-      const { token } = JWT.parseTokenFromHeader(authorization);
+      const userLocals = req.app.locals.user;
 
-      return this.ok(res, token);
+      const user = await this.adminRepo.getById(userLocals.sub);
+      if (!user) return this.notFound(res, "Admin not found");
+
+      const userDTO: AdminDTO = {
+        id: user.id,
+        avatar: user.avatar as string,
+        email: user.email.value,
+        lastLoggedInAt: user.lastLoggedInAt,
+        name: user.name.value,
+      };
+
+      return this.ok(res, userDTO);
     } catch (err) {
       console.log("[GetProfileUseCase]", err);
       this.internalServerError(res, (err as Error).message);
