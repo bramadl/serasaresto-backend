@@ -30,6 +30,22 @@ export class OrderRepository implements IOrderRepo {
     return this.count();
   }
 
+  public async listAll(): Promise<Order[]> {
+    const orders = await this.prismaOrder.findMany({
+      include: {
+        customer: true,
+        orderDetails: {
+          include: {
+            menu: true,
+          },
+        },
+        table: true,
+      },
+    });
+
+    return orders.map((order) => OrderMap.toDomain(order));
+  }
+
   public async getAll(
     tableId: string,
     customerId: string

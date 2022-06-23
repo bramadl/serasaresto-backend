@@ -1,10 +1,12 @@
 import { Request, Response, Router } from "express";
 import {
   confirmOrderController,
+  getAllOrdersController,
   getOrderHistoriesController,
   makeOrderController,
   viewOrderController,
 } from "../../../../modules/orders/controllers";
+import { auth } from "../../middleware/auth";
 import { verifyTableToken } from "../../middleware/verifyTableToken";
 
 export const orderRouter = Router();
@@ -25,4 +27,8 @@ orderRouter.post(
 
 orderRouter.post("/", verifyTableToken, (req: Request, res: Response) => {
   return makeOrderController.execute(req, res);
+});
+
+orderRouter.get("/all/orders", auth("admin"), (req: Request, res: Response) => {
+  return getAllOrdersController.execute(req, res);
 });

@@ -11,6 +11,7 @@ import { UpdateItemFromCartUseCase } from "../useCases/carts/UpdateItemFromCartU
 import { GetAllMenusUseCase } from "../useCases/menus/GetAllMenusUseCase";
 import { GetMenusUseCase } from "../useCases/menus/GetMenus";
 import { ConfirmOrderUseCase } from "../useCases/orders/ConfirmOrderUseCase";
+import { GetAllOrdersUseCase } from "../useCases/orders/GetAllOrdersUseCase";
 import { GetOrderHistoriesUseCase } from "../useCases/orders/GetOrderHistoriesUseCase";
 import { MakeOrderUseCase } from "../useCases/orders/MakeOrderUseCase";
 import { ViewOrderUseCase } from "../useCases/orders/ViewOrderUseCase";
@@ -45,6 +46,8 @@ export const removeItemFromCartController = new RemoveItemFromCartUseCase(
 );
 
 // The Order Use Cases
+export const getAllOrdersController = new GetAllOrdersUseCase(orderRepository);
+
 export const makeOrderController = new MakeOrderUseCase(
   cartRepository,
   customerRepository,
