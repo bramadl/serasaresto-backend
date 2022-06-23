@@ -8,6 +8,7 @@ import { AddItemToCartUseCase } from "../useCases/carts/AddItemToCartUseCase";
 import { GetCartUseCase } from "../useCases/carts/GetCartUseCase";
 import { RemoveItemFromCartUseCase } from "../useCases/carts/RemoveItemFromCartUseCase";
 import { UpdateItemFromCartUseCase } from "../useCases/carts/UpdateItemFromCartUseCase";
+import { GetAllMenusUseCase } from "../useCases/menus/GetAllMenusUseCase";
 import { GetMenusUseCase } from "../useCases/menus/GetMenus";
 import { ConfirmOrderUseCase } from "../useCases/orders/ConfirmOrderUseCase";
 import { GetOrderHistoriesUseCase } from "../useCases/orders/GetOrderHistoriesUseCase";
@@ -16,6 +17,8 @@ import { ViewOrderUseCase } from "../useCases/orders/ViewOrderUseCase";
 
 // The Menu Use Cases
 export const getMenusController = new GetMenusUseCase(menuRepository);
+
+export const getAllMenusController = new GetAllMenusUseCase(menuRepository);
 
 // The Cart Use Cases
 export const getCartController = new GetCartUseCase(

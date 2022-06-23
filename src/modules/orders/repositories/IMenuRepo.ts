@@ -19,10 +19,9 @@ export interface PaginationConstructor {
 
 export interface IMenuRepo {
   countMenus(): Promise<number>;
-
+  getAll(): Promise<Menu[]>;
   getMenus(
     option: SearchOption
   ): Promise<{ data: Result<Menu[]>; pagination: PaginationConstructor }>;
-
   findMenuById(id: string): Promise<Result<Menu>>;
 }
