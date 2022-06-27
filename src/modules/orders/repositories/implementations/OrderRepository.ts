@@ -41,6 +41,9 @@ export class OrderRepository implements IOrderRepo {
         },
         table: true,
       },
+      orderBy: {
+        status: "asc",
+      },
     });
 
     return orders.map((order) => OrderMap.toDomain(order));

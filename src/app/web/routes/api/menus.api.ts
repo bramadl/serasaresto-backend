@@ -16,3 +16,5 @@ menuRouter.get("/all", auth("admin"), (req: Request, res: Response) => {
 menuRouter.get("/list", verifyTableToken, (req: Request, res: Response) => {
   return getMenusController.execute(req, res);
 });
+
+// TODO: CRUD MENU
