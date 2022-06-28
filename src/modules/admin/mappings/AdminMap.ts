@@ -20,6 +20,7 @@ export class AdminMap {
         name: createName.getValue(),
         avatar: admin.avatar,
         lastLoggedInAt: admin.lastLoggedInAt,
+        role: admin.role,
       },
       admin.id
     );
@@ -38,6 +39,15 @@ export class AdminMap {
       role: admin.role,
       createdAt: admin.createdAt,
       updatedAt: admin.createdAt,
+    };
+  }
+
+  public static toDTO(admin: Admin): any {
+    return {
+      id: admin.id,
+      name: admin.name.value,
+      email: admin.email.value,
+      role: admin.role,
     };
   }
 }
