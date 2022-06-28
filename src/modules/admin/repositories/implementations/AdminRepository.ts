@@ -17,6 +17,11 @@ export class AdminRepository implements IAdminRepo {
     this.adminPrisma = adminPrisma;
   }
 
+  async getAll(): Promise<Admin[]> {
+    const admins = await this.adminPrisma.findMany({});
+    return admins.map((admin) => AdminMap.toDomain(admin));
+  }
+
   async getById(id: string): Promise<Admin | null> {
     const admin = await this.adminPrisma.findUnique({ where: { id } });
     if (!admin) return null;

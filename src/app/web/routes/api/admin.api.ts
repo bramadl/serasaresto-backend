@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import {
   createAdminController,
   deleteAdminController,
+  getAllAdminController,
   getDashboardStatsController,
   getProfileController,
   loginController,
@@ -9,6 +10,10 @@ import {
 import { auth } from "../../middleware/auth";
 
 export const adminRouter = Router();
+
+adminRouter.get("/all", auth("admin"), (req: Request, res: Response) => {
+  return getAllAdminController.execute(req, res);
+});
 
 adminRouter.get("/profile", auth("admin"), (req: Request, res: Response) => {
   return getProfileController.execute(req, res);
