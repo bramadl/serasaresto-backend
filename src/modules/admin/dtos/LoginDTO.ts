@@ -4,6 +4,7 @@ export interface AdminDTO {
   name: string;
   email: string;
   lastLoggedInAt: Date;
+  role: string;
 }
 
 export interface LoginDTO {

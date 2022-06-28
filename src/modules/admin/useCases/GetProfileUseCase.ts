@@ -24,6 +24,7 @@ export class GetProfileUseCase extends BaseController {
         email: user.email.value,
         lastLoggedInAt: user.lastLoggedInAt,
         name: user.name.value,
+        role: user.role,
       };
 
       return this.ok(res, userDTO);

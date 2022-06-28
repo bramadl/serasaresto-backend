@@ -54,6 +54,7 @@ export class LoginUseCase extends BaseController {
           avatar: admin.avatar as string,
           email: admin.email.value,
           name: admin.name.value,
+          role: admin.role,
           lastLoggedInAt: admin.lastLoggedInAt,
         },
       };
