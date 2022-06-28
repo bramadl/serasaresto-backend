@@ -35,6 +35,7 @@ export class AdminMap {
       email: admin.email.value,
       password: admin.password.value,
       lastLoggedInAt: admin.lastLoggedInAt,
+      role: admin.role,
       createdAt: admin.createdAt,
       updatedAt: admin.createdAt,
     };

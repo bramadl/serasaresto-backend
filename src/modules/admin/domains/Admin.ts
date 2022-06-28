@@ -11,6 +11,7 @@ interface AdminProps {
   email: AdminEmail;
   password: AdminPassword;
   lastLoggedInAt?: Date;
+  role?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -39,6 +40,10 @@ export class Admin extends Entity<AdminProps> {
 
   get password(): AdminPassword {
     return this.props.password;
+  }
+
+  get role(): string {
+    return this.props.role as string;
   }
 
   get lastLoggedInAt(): Date {

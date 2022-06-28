@@ -47,9 +47,7 @@ export class Menu extends Entity<MenuProps> {
   public static create(props: MenuProps, id?: string): Result<Menu> {
     const guardResult = Guard.againstNullOrUndefinedBulk([
       { argument: props.name, argumentName: "menu name" },
-      { argument: props.description, argumentName: "menu description" },
       { argument: props.price, argumentName: "menu price" },
-      { argument: props.thumbnail, argumentName: "menu thumbnail" },
       { argument: props.inStock, argumentName: "menu stock" },
       { argument: props.type, argumentName: "menu type" },
     ]);

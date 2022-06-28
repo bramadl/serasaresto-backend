@@ -37,12 +37,12 @@ export class CartMap {
             {
               menu: Menu.create(
                 {
-                  description: cartItem.menu.description,
+                  description: cartItem.menu.description as string,
                   inStock: cartItem.menu.inStock,
                   name: cartItem.menu.name,
                   price: cartItem.menu.price,
                   type: cartItem.menu.type,
-                  thumbnail: cartItem.menu.thumbnail,
+                  thumbnail: cartItem.menu.thumbnail || undefined,
                 },
                 cartItem.menu.id
               ).getValue(),

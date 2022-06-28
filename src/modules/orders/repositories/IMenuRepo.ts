@@ -24,4 +24,6 @@ export interface IMenuRepo {
     option: SearchOption
   ): Promise<{ data: Result<Menu[]>; pagination: PaginationConstructor }>;
   findMenuById(id: string): Promise<Result<Menu>>;
+  save(menu: Menu): Promise<void>;
+  delete(menuId: string): Promise<void>;
 }

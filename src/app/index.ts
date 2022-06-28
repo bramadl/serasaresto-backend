@@ -20,6 +20,7 @@ export class App {
     this.app.use(cors({ origin: "*" }));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    this.app.use("/storage", express.static(__dirname + "/storage"));
     this.app.use(routes);
   }
 

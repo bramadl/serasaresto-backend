@@ -1,4 +1,7 @@
 import { MenuType, Prisma } from "@prisma/client";
+import { PrismaClientValidationError } from "@prisma/client/runtime";
+import fs, { unlink } from "fs";
+import { resolve } from "path";
 
 import { Result } from "../../../../shared/logic/Result";
 import { Menu } from "../../domains/Menu";
@@ -92,5 +95,72 @@ export class MenuRepository implements IMenuRepo {
     if (!find) return Result.fail<Menu>("The menu couldnt be found.");
     const menu = MenuMap.toDomain(find);
     return Result.ok<Menu>(menu);
+  }
+
+  public async save(menu: Menu): Promise<void> {
+    const isExists = await this.exists(menu.id);
+
+    if (isExists) {
+      await this.menuPrisma.update({
+        where: { id: menu.id },
+        data: {
+          name: menu.name,
+          price: menu.price,
+          thumbnail: menu.thumbnail,
+          type: menu.type,
+          description: menu.description,
+          inStock: menu.inStock,
+        },
+      });
+    } else {
+      try {
+        await this.menuPrisma.create({
+          data: {
+            id: menu.id,
+            name: menu.name,
+            price: menu.price,
+            thumbnail: menu.thumbnail,
+            type: menu.type,
+            description: menu.description,
+            inStock: menu.inStock,
+          },
+        });
+      } catch (e) {
+        if (e instanceof PrismaClientValidationError) {
+          this.rollbackSaveThumbnail(menu.thumbnail);
+          throw new Error("Failed to save menu");
+        }
+      }
+    }
+  }
+
+  public async delete(id: string): Promise<void> {
+    const menu = await this.menuPrisma.findUnique({ where: { id } });
+
+    if (menu) {
+      this.rollbackSaveThumbnail(menu.thumbnail as string);
+      await this.menuPrisma.delete({
+        where: { id },
+      });
+    }
+  }
+
+  private async rollbackSaveThumbnail(thumbnail: string) {
+    const fileName = thumbnail.split("http://localhost:8000/storage/")[1];
+
+    if (fileName) {
+      const path = resolve(__dirname, "../../../../", "app/storage/", fileName);
+      const exists = fs.existsSync(path);
+      if (exists) {
+        unlink(path, () => {
+          //
+        });
+      }
+    }
+  }
+
+  private async exists(id: string) {
+    const found = await this.menuPrisma.findUnique({ where: { id } });
+    return !!found;
   }
 }

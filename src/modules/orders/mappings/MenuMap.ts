@@ -7,9 +7,9 @@ export class MenuMap {
     return Menu.create(
       {
         name: menu.name,
-        description: menu.description,
+        description: menu.description as string,
         price: menu.price,
-        thumbnail: menu.thumbnail,
+        thumbnail: menu.thumbnail || undefined,
         inStock: menu.inStock,
         type: menu.type,
       },
@@ -22,9 +22,9 @@ export class MenuMap {
       return Menu.create(
         {
           name: prismaMenu.name,
-          description: prismaMenu.description,
+          description: prismaMenu.description as string,
           price: prismaMenu.price,
-          thumbnail: prismaMenu.thumbnail,
+          thumbnail: prismaMenu.thumbnail || undefined,
           inStock: prismaMenu.inStock,
           type: prismaMenu.type,
         },

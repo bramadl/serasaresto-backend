@@ -30,6 +30,7 @@ model Admin {
   email          String
   password       String
   avatar         String?
+  role           String   @default("admin")
   lastLoggedInAt DateTime @default(now()) @map("last_logged_in_at")
   createdAt      DateTime @default(now()) @map("created_at")
   updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
@@ -84,9 +85,9 @@ model OrderDetail {
 model Menu {
   id           String        @id @default(uuid())
   name         String        @db.VarChar(100)
-  description  String        @db.Text
+  description  String?       @db.Text
   price        Int
-  thumbnail    String        @db.VarChar(255)
+  thumbnail    String?       @default("https://klubanet.files.wordpress.com/2015/05/blank-thumbnail.jpg") @db.VarChar(255)
   inStock      Boolean       @default(true) @map("in_stock")
   type         MenuType
   orderDetails OrderDetail[]

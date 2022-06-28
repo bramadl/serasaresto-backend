@@ -67,12 +67,12 @@ export class OrderMap {
         {
           menu: Menu.create(
             {
-              description: orderDetail.menu.description,
+              description: orderDetail.menu.description as string,
               inStock: orderDetail.menu.inStock,
               name: orderDetail.menu.name,
               price: orderDetail.menu.price,
               type: orderDetail.menu.type,
-              thumbnail: orderDetail.menu.thumbnail,
+              thumbnail: orderDetail.menu.thumbnail || undefined,
             },
             orderDetail.id
           ).getValue(),
