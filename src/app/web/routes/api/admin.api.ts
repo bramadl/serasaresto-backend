@@ -1,5 +1,7 @@
 import { Request, Response, Router } from "express";
 import {
+  createAdminController,
+  deleteAdminController,
   getDashboardStatsController,
   getProfileController,
   loginController,
@@ -18,4 +20,12 @@ adminRouter.post("/login", (req: Request, res: Response) => {
 
 adminRouter.get("/dashboard/stats", (req: Request, res: Response) => {
   return getDashboardStatsController.execute(req, res);
+});
+
+adminRouter.post("/create", auth("admin"), (req: Request, res: Response) => {
+  return createAdminController.execute(req, res);
+});
+
+adminRouter.delete("/:id", auth("admin"), (req: Request, res: Response) => {
+  return deleteAdminController.execute(req, res);
 });

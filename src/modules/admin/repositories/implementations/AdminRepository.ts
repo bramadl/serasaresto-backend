@@ -56,4 +56,23 @@ export class AdminRepository implements IAdminRepo {
 
     return Boolean(found);
   }
+
+  public async createAdmin(admin: Admin): Promise<void> {
+    await this.adminPrisma.create({
+      data: {
+        id: admin.id,
+        email: admin.email.value,
+        name: admin.name.value,
+        password: admin.password.value,
+        avatar: admin.avatar,
+        role: admin.role,
+      },
+    });
+  }
+
+  public async delete(id: string): Promise<void> {
+    await this.adminPrisma.delete({
+      where: { id },
+    });
+  }
 }
